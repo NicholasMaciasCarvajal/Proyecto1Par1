@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MetronomeMover
   pointA: {fileID: 5446006836381190368}
   pointB: {fileID: 1794384005034605514}
-  speed: 0.5
+  speed: 1.5
 --- !u!50 &7426795595724125020
 Rigidbody2D:
   serializedVersion: 5

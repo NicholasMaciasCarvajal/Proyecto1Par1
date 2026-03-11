@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
 
         if (pausePanel != null)
             pausePanel.SetActive(true);
+
+        ClickCounter.Instance.clickText.alpha = 0;
     }
 
     void SetGameplayUI()
@@ -77,6 +79,8 @@ public class GameManager : MonoBehaviour
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
+
+        ClickCounter.Instance.clickText.alpha = 1;
     }
 
     public void OpenCloseCredits()

@@ -22,15 +22,11 @@ public class PauseClickSequence : MonoBehaviour
 
     public void RegisterClick()
     {
-        Debug.LogError("LLego al punto A");
         if (SceneManager.GetActiveScene().name != "MainGameplay")
             return;
-        Debug.LogError("LLego al punto B");
 
-        Debug.LogError("LLego al punto C");
         if (!GameManager.Instance.IsPaused)
             return;
-        Debug.LogError("LLego al punto D");
 
         // Si ya hay un vaciado en curso, lo detenemos para procesar el nuevo click
         KillDrainSequence();
