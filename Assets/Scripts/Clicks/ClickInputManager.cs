@@ -45,11 +45,15 @@ public class ClickInputManager : MonoBehaviour
         {
             holding = false;
 
-            if (!ClickCounter.Instance.HoldComplete() && !GameManager.Instance.IsPaused)
+            if (!ClickCounter.Instance.HoldComplete())
             {
-                ClickCounter.Instance.AddClick(ModifierClick.Instance.GetClickValue());
-                FindObjectOfType<MetronomeColliderGame>()?.RegisterClick();
+                if (!GameManager.Instance.IsPaused)
+                {
+                    ClickCounter.Instance.AddClick(ModifierClick.Instance.GetClickValue());
+                    FindObjectOfType<MetronomeColliderGame>()?.RegisterClick();
+                }
                 FindObjectOfType<MenuClickSequence>()?.RegisterClick();
+                FindObjectOfType<PauseClickSequence>()?.RegisterClick();
                 OnClick?.Invoke();
             }
 

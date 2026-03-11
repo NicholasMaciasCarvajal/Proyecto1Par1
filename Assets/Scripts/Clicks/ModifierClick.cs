@@ -18,6 +18,8 @@ public class ModifierClick : MonoBehaviour
     public double multiplierPerLevel = 2;
     public double percentPerLevel = 0.5; // 50%
 
+    public BigInteger upgradeCost = 10;
+
     void Awake()
     {
         Instance = this;
@@ -42,6 +44,9 @@ public class ModifierClick : MonoBehaviour
 
     public void IncreaseRandomModifier()
     {
+        if (ClickCounter.Instance.totalClicks < upgradeCost)
+            return;
+
         int roll = Random.Range(0, 3);
 
         switch (roll)
@@ -49,17 +54,27 @@ public class ModifierClick : MonoBehaviour
             case 0:
                 sumLevel++;
                 Debug.Log("Upgrade SUMA nivel: " + sumLevel);
+                IncreaseUpgradeCost();
                 break;
 
             case 1:
                 multiplierLevel++;
                 Debug.Log("Upgrade MULTIPLICADOR nivel: " + multiplierLevel);
+                IncreaseUpgradeCost();
                 break;
 
             case 2:
                 percentLevel++;
                 Debug.Log("Upgrade PORCENTAJE nivel: " + percentLevel);
+                IncreaseUpgradeCost();
                 break;
         }
+    }
+
+    public void IncreaseUpgradeCost()
+    {
+        upgradeCost = new BigInteger((double)upgradeCost * 1.5);
+        ClickCounter.Instance.totalClicks = ClickCounter.Instance.totalClicks - upgradeCost;
+        ClickCounter.Instance.ActualizarClicks();
     }
 }

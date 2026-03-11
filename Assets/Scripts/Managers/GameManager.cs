@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuPanel;
 
     public bool isInCredits = false;
+    //public bool isPaused = false;
 
     void Awake()
     {

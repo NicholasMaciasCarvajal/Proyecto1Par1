@@ -12,7 +12,7 @@ public class MetronomeColliderGame : MonoBehaviour
     int currentAttempts;
 
     [Header("Success")]
-    public int maxSuccess = 5;
+    public int maxSuccess;
     public int currentSuccess;
 
     [Header("UI & Visuals")]
@@ -24,18 +24,23 @@ public class MetronomeColliderGame : MonoBehaviour
     public AudioClip successSound;
     public AudioClip failSound;
 
+    bool canClick = false;
+    bool yaClicoEnEstePaso = false;
+    // Cambia la inicialización de esta variable (o asegúrate de que esté en true al inicio)
+    bool juegoTerminado = true;
+
     [Header("Events")]
     public UnityEvent OnFail;
     public UnityEvent OnSuccess;
 
-    bool canClick = false;
-    bool yaClicoEnEstePaso = false;
-    bool juegoTerminado = false; // Nueva bandera para ignorar clics extra durante la espera
-
     void Start()
     {
-        ClickInputManager.Instance.OnClick += RegisterClick;
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
+
+        // --- NUEVO: Delay inicial para evitar clics accidentales ---
+        DOVirtual.DelayedCall(0.5f, () => {
+            juegoTerminado = false;
+        });
     }
 
     void OnDestroy()
@@ -79,7 +84,15 @@ public class MetronomeColliderGame : MonoBehaviour
         {
             juegoTerminado = true;
             // Espera 1 segundo antes de invocar el éxito
-            DOVirtual.DelayedCall(1f, () => OnSuccess?.Invoke());
+            // 
+            if (OnSuccess.GetPersistentEventCount() > 0)
+            {
+                DOVirtual.DelayedCall(1f, () => OnSuccess.Invoke());
+            }
+            else
+            {
+                DOVirtual.DelayedCall(1f, () => OnSuccessNull());
+            }
         }
     }
 
@@ -107,6 +120,7 @@ public class MetronomeColliderGame : MonoBehaviour
             {
                 juegoTerminado = true;
                 // Espera 1 segundo antes de invocar la derrota
+                
                 DOVirtual.DelayedCall(1f, () => OnFail?.Invoke());
             }
         }
@@ -155,5 +169,20 @@ public class MetronomeColliderGame : MonoBehaviour
             canClick = false;
             yaClicoEnEstePaso = false;
         }
+    }
+
+    public void DestroyObject()
+    {
+        if (transform.parent != null)
+            Destroy(transform.parent.gameObject, 0.4f);
+        else
+            Destroy(gameObject, 0.4f);
+    }
+
+    private void OnSuccessNull()
+    {
+        ModifierClick.Instance.IncreaseRandomModifier();
+
+        DestroyObject();
     }
 }

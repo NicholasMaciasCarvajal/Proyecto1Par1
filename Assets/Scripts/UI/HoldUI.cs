@@ -63,14 +63,14 @@ public class HoldUI : MonoBehaviour
             }
 
             holdImage.color = Color.Lerp(colorInicial, colorCargado, t);
-            float shakeForce = Mathf.Lerp(0, 5, t);
+            float shakeForce = Mathf.Lerp(0, 25, t);
 
             if (heartbeatTween != null && heartbeatTween.IsActive())
                 heartbeatTween.Kill();
 
             AplicarShake(holdButton, posOriginalButton, shakeForce);
             if (fingerRect != null)
-                AplicarShake(fingerRect, posOriginalFinger, shakeForce * 0.4f);
+                AplicarShake(fingerRect, posOriginalFinger, shakeForce/5);
         }
         // 2. ¿Está bajando o está en cero?
         else
