@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
     [Header("UI Panels")]
     public GameObject gameplayPanel;
     public GameObject pausePanel;
+    public GameObject creditsPanel;
+    public GameObject mainMenuPanel;
+
+    public bool isInCredits = false;
 
     void Awake()
     {
@@ -72,5 +76,27 @@ public class GameManager : MonoBehaviour
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
+    }
+
+    public void OpenCloseCredits()
+    {
+        if (creditsPanel.activeSelf)
+        {
+            ClickCounter.Instance.ResetHold();
+            creditsPanel.SetActive(false);
+            mainMenuPanel.SetActive(true);
+            isInCredits = false;
+        }
+        else
+        {
+            creditsPanel.SetActive(true);
+            mainMenuPanel.SetActive(false);
+            isInCredits = true;
+        }
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 }

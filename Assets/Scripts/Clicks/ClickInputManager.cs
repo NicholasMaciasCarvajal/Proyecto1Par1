@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class ClickInputManager : MonoBehaviour
 {
@@ -25,12 +26,18 @@ public class ClickInputManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            ClickCounter.Instance.AddHoldTime(Time.unscaledDeltaTime);
+            if (!GameManager.Instance.isInCredits) {
+                ClickCounter.Instance.AddHoldTime(Time.unscaledDeltaTime);
+            }
 
             if (ClickCounter.Instance.HoldComplete())
             {
                 OnHoldComplete?.Invoke();
                 ClickCounter.Instance.ResetHold();
+                if (SceneManager.GetActiveScene().name == "MainMenu")
+                {
+                    SceneManager.LoadScene("MainGameplay");
+                }
             }
         }
 
@@ -41,7 +48,8 @@ public class ClickInputManager : MonoBehaviour
             if (!ClickCounter.Instance.HoldComplete() && !GameManager.Instance.IsPaused)
             {
                 ClickCounter.Instance.AddClick(ModifierClick.Instance.GetClickValue());
-
+                FindObjectOfType<MetronomeColliderGame>()?.RegisterClick();
+                FindObjectOfType<MenuClickSequence>()?.RegisterClick();
                 OnClick?.Invoke();
             }
 
