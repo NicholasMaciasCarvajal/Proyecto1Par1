@@ -57,39 +57,29 @@ public class ClickCounter : MonoBehaviour
     {
         totalClicks += amount;
 
-        // --- CÁLCULOS DE FUERZA ---
         float factorLog = (float)Math.Log10((double)amount + 1);
         float intensidad = 20f;
         float fuerzaFinal = Mathf.Min(5f + (factorLog * intensidad), 100f);
 
-        // --- CÁLCULO DE ESCALA Y ROTACIÓN ---
         float escalaPunch = Mathf.Clamp(factorLog * 0.05f, 0.05f, 0.3f);
 
-        // Calculamos una base de rotación y le aplicamos un multiplicador aleatorio
-        // Random.Range(-1f, 1f) hará que a veces sea izquierda, a veces derecha y con distinta fuerza
         float direccionAleatoria = UnityEngine.Random.Range(0.5f, 1.5f) * (UnityEngine.Random.value > 0.5f ? 1f : -1f);
         float rotacionBase = Mathf.Clamp(factorLog * 2f, 5f, 15f);
         float rotacionFinal = rotacionBase * direccionAleatoria;
 
-        // --- RESET Y PROTECCIÓN ---
         clickText.rectTransform.DOKill(true);
         clickText.rectTransform.anchoredPosition = posOriginal;
         clickText.rectTransform.localScale = Vector3.one;
         clickText.rectTransform.localRotation = Quaternion.identity;
 
-        // --- ANIMACIONES ---
 
-        // 1. Vibración de posición
         clickText.rectTransform.DOShakeAnchorPos(0.15f, fuerzaFinal, 30, 90, false, true);
 
-        // 2. Golpe de escala
         clickText.rectTransform.DOPunchScale(
             new Vector3(escalaPunch, escalaPunch, 0),
             0.1f, 10, 1
         ).OnComplete(() => clickText.rectTransform.localScale = Vector3.one);
 
-        // 3. Golpe de Rotación ALEATORIA
-        // Ahora usamos rotacionFinal que incluye la dirección y fuerza variada
         clickText.rectTransform.DOPunchRotation(
             new Vector3(0, 0, rotacionFinal),
             0.15f,

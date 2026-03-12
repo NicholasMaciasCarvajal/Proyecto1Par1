@@ -19,7 +19,7 @@ public class HoldUI : MonoBehaviour
     private Vector2 posOriginalFinger;
     private Tween heartbeatTween;
     private float lastProgress;
-    private bool estabaBajando; // Para detectar el cambio de dirección
+    private bool estabaBajando;
 
     void Awake()
     {
@@ -52,27 +52,19 @@ public class HoldUI : MonoBehaviour
 
         holdImage.fillAmount = t;
 
-        // 1. ¿Está creciendo? (Presionando)
         if (progress > lastProgress && progress > 0)
         {
-            // SI ESTABA BAJANDO Y AHORA SUBE -> ¡DESTELLO!
-            if (estabaBajando)
-            {
-                EjecutarDestello();
-                estabaBajando = false;
-            }
-
             holdImage.color = Color.Lerp(colorInicial, colorCargado, t);
-            float shakeForce = Mathf.Lerp(0, 25, t);
+            float shakeForce = Mathf.Lerp(0, 15, t);
 
             if (heartbeatTween != null && heartbeatTween.IsActive())
                 heartbeatTween.Kill();
 
-            AplicarShake(holdButton, posOriginalButton, shakeForce);
+            holdButton.anchoredPosition = posOriginalButton + (UnityEngine.Random.insideUnitCircle * shakeForce);
+
             if (fingerRect != null)
-                AplicarShake(fingerRect, posOriginalFinger, shakeForce/5);
+                fingerRect.anchoredPosition = posOriginalFinger + (UnityEngine.Random.insideUnitCircle * (shakeForce / 5f));
         }
-        // 2. ¿Está bajando o está en cero?
         else
         {
             if (progress < lastProgress) estabaBajando = true;
@@ -84,7 +76,7 @@ public class HoldUI : MonoBehaviour
             else
             {
                 holdImage.color = colorInicial;
-                estabaBajando = false; // Reset al llegar a cero
+                estabaBajando = false;
             }
 
             if (progress <= 0 && lastProgress > 0)
@@ -95,26 +87,6 @@ public class HoldUI : MonoBehaviour
         }
 
         lastProgress = progress;
-    }
-
-    void EjecutarDestello()
-    {
-        // 1. Flash de color blanco en la barra
-        holdImage.DOKill();
-        holdImage.color = Color.white;
-        // Vuelve al color que le toca rápidamente
-        holdImage.DOColor(Color.Lerp(colorInicial, colorCargado, holdImage.fillAmount), 0.2f);
-
-        // 2. Pequeño salto de escala en el botón para sentir el "click"
-        holdButton.DOKill(true);
-        holdButton.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), 0.2f, 10, 1);
-    }
-
-    void AplicarShake(RectTransform rt, Vector2 posOrig, float force)
-    {
-        rt.DOKill(true);
-        rt.anchoredPosition = posOrig;
-        rt.DOShakeAnchorPos(0.05f, force, 10, 90, false, true);
     }
 
     void ResetPosiciones()

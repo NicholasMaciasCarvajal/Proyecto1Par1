@@ -1,4 +1,6 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject creditsPanel;
     public GameObject mainMenuPanel;
+    public GameObject tutorialPanel;
 
     public bool isInCredits = false;
     //public bool isPaused = false;
@@ -104,4 +107,16 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void SceneChange()
+    {
+        tutorialPanel.SetActive(true);
+
+        DOVirtual.DelayedCall(5f, () =>
+        {
+            SceneManager.LoadScene("MainGameplay");
+            SceneManager.UnloadSceneAsync("MainMenu");
+        });
+    }
+
 }

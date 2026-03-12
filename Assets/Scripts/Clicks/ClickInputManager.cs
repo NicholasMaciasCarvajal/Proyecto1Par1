@@ -36,7 +36,7 @@ public class ClickInputManager : MonoBehaviour
                 ClickCounter.Instance.ResetHold();
                 if (SceneManager.GetActiveScene().name == "MainMenu")
                 {
-                    SceneManager.LoadScene("MainGameplay");
+                    GameManager.Instance.SceneChange();
                 }
             }
         }
@@ -50,10 +50,10 @@ public class ClickInputManager : MonoBehaviour
                 if (!GameManager.Instance.IsPaused)
                 {
                     ClickCounter.Instance.AddClick(ModifierClick.Instance.GetClickValue());
-                    FindObjectOfType<MetronomeColliderGame>()?.RegisterClick();
+                    FindFirstObjectByType<MetronomeColliderGame>()?.RegisterClick();
                 }
-                FindObjectOfType<MenuClickSequence>()?.RegisterClick();
-                FindObjectOfType<PauseClickSequence>()?.RegisterClick();
+                FindFirstObjectByType<MenuClickSequence>()?.RegisterClick();
+                FindFirstObjectByType<PauseClickSequence>()?.RegisterClick();
                 OnClick?.Invoke();
             }
 
