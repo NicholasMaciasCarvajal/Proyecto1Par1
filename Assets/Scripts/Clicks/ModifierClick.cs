@@ -19,6 +19,7 @@ public class ModifierClick : MonoBehaviour
     public double percentPerLevel = 0.5; // 50%
 
     public BigInteger upgradeCost = 10;
+    public string upgradeCostS;
 
     void Awake()
     {
@@ -73,8 +74,11 @@ public class ModifierClick : MonoBehaviour
 
     public void IncreaseUpgradeCost()
     {
-        upgradeCost = new BigInteger((double)upgradeCost * 1.5);
         ClickCounter.Instance.totalClicks = ClickCounter.Instance.totalClicks - upgradeCost;
         ClickCounter.Instance.ActualizarClicks();
+        upgradeCost = new BigInteger((double)upgradeCost * 2.4);
+        upgradeCostS = upgradeCost.ToString();
+        ClickCounter.Instance.ActualizarCosto();
+
     }
 }

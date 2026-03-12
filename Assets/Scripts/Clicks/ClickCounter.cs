@@ -1,10 +1,11 @@
+using DG.Tweening;
 using System;
 using System.Numerics;
 using UnityEngine;
-using DG.Tweening;
+using UnityEngine.SceneManagement;
+using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
-using Quaternion = UnityEngine.Quaternion;
 
 public class ClickCounter : MonoBehaviour
 {
@@ -12,14 +13,15 @@ public class ClickCounter : MonoBehaviour
 
     [Header("UI Reference")]
     private Vector2 posOriginal; // Para guardar el anclaje inicial
+    public TMPro.TextMeshProUGUI clickText;
+    public TMPro.TextMeshProUGUI upgradeCost;
+    public GameObject winPanel;
 
     [Header("Clicks")]
     [SerializeField]
     private string initialClicks = "0"; // editable en inspector
 
     public BigInteger totalClicks;
-
-    public TMPro.TextMeshProUGUI clickText;
 
     [Header("Hold System")]
     public float holdProgress;
@@ -51,6 +53,12 @@ public class ClickCounter : MonoBehaviour
             holdProgress -= holdDecaySpeed * Time.deltaTime;
             holdProgress = Mathf.Max(0, holdProgress);
         }
+
+        if(totalClicks >= 10000000)
+        {
+
+        }
+
     }
 
     public void AddClick(BigInteger amount)
@@ -142,5 +150,34 @@ public class ClickCounter : MonoBehaviour
 
             clickText.text = $"Clicks: {mantisa:F2} × 10<sup>{exponente}</sup>";
         }
+    }
+
+    public void ActualizarCosto()
+    {
+        if (ModifierClick.Instance.upgradeCost < 1000000)
+        {
+            upgradeCost.text = "Costo: " + ModifierClick.Instance.upgradeCost.ToString("N0");
+        }
+        else
+        {
+            double valorDouble = (double)ModifierClick.Instance.upgradeCost;
+
+            int exponente = (int)Math.Floor(Math.Log10(valorDouble));
+
+            double mantisa = valorDouble / Math.Pow(10, exponente);
+
+            upgradeCost.text = $"Costo: {mantisa:F2} × 10<sup>{exponente}</sup>";
+        }
+    }
+
+    public void Win()
+    {
+        winPanel.SetActive(true);
+
+        DOVirtual.DelayedCall(5f, () =>
+        {
+            SceneManager.LoadScene("MainMenu");
+            SceneManager.UnloadSceneAsync("MainGameplay");
+        });
     }
 }
