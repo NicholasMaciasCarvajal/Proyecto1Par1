@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using System.Numerics; // Asegúrate de incluir esto para BigInteger
 
 public class ClickInputManager : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class ClickInputManager : MonoBehaviour
 
     public event Action OnClick;
     public event Action OnHoldComplete;
+
+    [Header("Floating Text Setup")]
+    public FloatingText floatingTextPrefab;
+    public RectTransform floatingTextContainer; // Un panel vacío dentro de tu Canvas
 
     bool holding;
 
@@ -26,7 +31,8 @@ public class ClickInputManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            if (!GameManager.Instance.isInCredits) {
+            if (!GameManager.Instance.isInCredits)
+            {
                 ClickCounter.Instance.AddHoldTime(Time.unscaledDeltaTime);
             }
 
@@ -49,7 +55,15 @@ public class ClickInputManager : MonoBehaviour
             {
                 if (!GameManager.Instance.IsPaused)
                 {
-                    ClickCounter.Instance.AddClick(ModifierClick.Instance.GetClickValue());
+                    // 1. Obtenemos el valor del click
+                    BigInteger clickValue = ModifierClick.Instance.GetClickValue();
+
+                    // 2. Sumamos el click al contador
+                    ClickCounter.Instance.AddClick(clickValue);
+
+                    // 3. GENERAMOS EL TEXTO FLOTANTE
+                    GenerarTextoFlotante(clickValue);
+
                     FindFirstObjectByType<MetronomeColliderGame>()?.RegisterClick();
                 }
                 FindFirstObjectByType<MenuClickSequence>()?.RegisterClick();
@@ -59,5 +73,41 @@ public class ClickInputManager : MonoBehaviour
 
             ClickCounter.Instance.StopHold();
         }
+    }
+
+    private void GenerarTextoFlotante(BigInteger valor)
+    {
+        if (floatingTextPrefab == null || floatingTextContainer == null) return;
+
+        // Instanciamos el prefab dentro del contenedor
+        FloatingText nuevoTexto = Instantiate(floatingTextPrefab, floatingTextContainer);
+
+        // Convertimos la posición del mouse de la pantalla al Canvas
+        UnityEngine.Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            floatingTextContainer,
+            Input.mousePosition,
+            null, // Cambia esto a Camera.main si tu Canvas está en "Screen Space - Camera"
+            out localPoint);
+
+        // Asignamos la posición y le damos algo de aleatoriedad para que no salgan todos amontonados
+        float randomX = UnityEngine.Random.Range(-20f, 20f);
+        float randomY = UnityEngine.Random.Range(-20f, 20f);
+        nuevoTexto.GetComponent<RectTransform>().anchoredPosition = localPoint + new UnityEngine.Vector2(randomX, randomY);
+
+        // Formateamos el número (usa tu misma lógica de mantisas si lo prefieres)
+        string valorTexto = valor < 1000000 ? valor.ToString("N0") : FormatBigNumber(valor);
+
+        // Iniciamos la animación
+        nuevoTexto.Animar(valorTexto);
+    }
+
+    // Un pequeño helper para que los números del texto flotante coincidan con tu formato
+    private string FormatBigNumber(BigInteger value)
+    {
+        double valorDouble = (double)value;
+        int exponente = (int)Math.Floor(Math.Log10(valorDouble));
+        double mantisa = valorDouble / Math.Pow(10, exponente);
+        return $"{mantisa:F2}x10^{exponente}";
     }
 }

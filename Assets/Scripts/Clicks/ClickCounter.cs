@@ -13,6 +13,9 @@ public class ClickCounter : MonoBehaviour
 
     [Header("UI Reference")]
     private Vector2 posOriginal; // Para guardar el anclaje inicial
+    private Vector2 posOriginalUpgrade; // NUEVO: Para guardar el anclaje inicial de upgradeCost
+    private Tween upgradeHeartbeatTween; // NUEVO: Para controlar la animación de latido
+
     public TMPro.TextMeshProUGUI clickText;
     public TMPro.TextMeshProUGUI upgradeCost;
     public GameObject winPanel;
@@ -42,10 +45,15 @@ public class ClickCounter : MonoBehaviour
 
     void Start()
     {
-        // Guardamos la posición exacta donde pusiste el texto en el Editor
+        // Guardamos las posiciones exactas donde pusiste el texto en el Editor
         posOriginal = clickText.rectTransform.anchoredPosition;
-    }
 
+        if (upgradeCost != null)
+        {
+            posOriginalUpgrade = upgradeCost.rectTransform.anchoredPosition;
+            IniciarLatidoCosto(); // Arrancamos el latido al iniciar la escena
+        }
+    }
     void Update()
     {
         if (!holding && holdProgress > 0)
@@ -56,9 +64,23 @@ public class ClickCounter : MonoBehaviour
 
         if(totalClicks >= 10000000)
         {
-
+            Win();
         }
 
+    }
+
+    public void IniciarLatidoCosto()
+    {
+        if (upgradeCost == null) return;
+
+        upgradeCost.rectTransform.DOKill();
+
+        upgradeCost.rectTransform.anchoredPosition = posOriginalUpgrade;
+        upgradeCost.rectTransform.localScale = Vector3.one;
+
+        upgradeHeartbeatTween = upgradeCost.rectTransform.DOScale(1.15f, 0.6f)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo);
     }
 
     public void AddClick(BigInteger amount)
@@ -170,14 +192,43 @@ public class ClickCounter : MonoBehaviour
         }
     }
 
+    [ContextMenu("Win")]
     public void Win()
     {
+        // 1. Obtenemos el CanvasGroup de tu panel
+        CanvasGroup canvasGroup = winPanel.GetComponent<CanvasGroup>();
+
+        // (Opcional) Si olvidaste ponerlo en el editor, esto se lo agrega automáticamente
+        if (canvasGroup == null)
+        {
+            canvasGroup = winPanel.AddComponent<CanvasGroup>();
+        }
+
+        // 2. Antes de activar el panel, lo hacemos totalmente transparente (Alpha = 0)
+        canvasGroup.alpha = 0f;
+
+        // 3. Activamos el panel (el jugador no lo verá de golpe porque es transparente)
         winPanel.SetActive(true);
+
+        // 4. Hacemos el "Fade In": Llevamos el Alpha a 1 (totalmente opaco) en 1 segundo
+        canvasGroup.DOFade(1f, 1.5f).SetEase(Ease.InOutQuad);
 
         DOVirtual.DelayedCall(5f, () =>
         {
             SceneManager.LoadScene("MainMenu");
             SceneManager.UnloadSceneAsync("MainGameplay");
         });
+    }
+
+    private void OnDestroy()
+    {
+        // Matamos la animación de latido si la escena se descarga o el objeto se destruye
+        if (upgradeHeartbeatTween != null && upgradeHeartbeatTween.IsActive())
+        {
+            upgradeHeartbeatTween.Kill();
+        }
+
+        // Por seguridad, limpiamos también el clickText
+        if (clickText != null) clickText.rectTransform.DOKill();
     }
 }
