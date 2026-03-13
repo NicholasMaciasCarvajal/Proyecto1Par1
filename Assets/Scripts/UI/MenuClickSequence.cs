@@ -71,7 +71,7 @@ public class MenuClickSequence : MonoBehaviour
         drainSequence = DOTween.Sequence();
         drainSequence.AppendInterval(resetTime);
 
-        float duracionPorImagen = 1.0f / clickCount;
+        float duracionPorImagen = 0.5f / clickCount;
         duracionPorImagen = Mathf.Clamp(duracionPorImagen, 0.2f, 0.5f);
 
         // Recorremos en orden inverso (de la última llena a la primera)
