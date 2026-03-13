@@ -2714,7 +2714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoClicker
   isAutoClickerActive: 0
-  clickInterval: 0.4
+  clickInterval: 0.125
 --- !u!1 &1913549212
 GameObject:
   m_ObjectHideFlags: 0
@@ -2835,7 +2835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModifierClick
   baseClickValue: 1
-  sumLevel: 0
+  sumLevel: 1
   multiplierLevel: 0
   percentLevel: 0
   sumPerLevel: 6.36

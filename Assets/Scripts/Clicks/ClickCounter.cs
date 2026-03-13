@@ -32,6 +32,10 @@ public class ClickCounter : MonoBehaviour
     public float holdDecaySpeed = 1f;
 
     bool holding;
+    private bool hasWon = false;
+
+    // 1. Obtenemos el CanvasGroup de tu panel
+    CanvasGroup canvasGroup;
 
     void Awake()
     {
@@ -53,6 +57,17 @@ public class ClickCounter : MonoBehaviour
             posOriginalUpgrade = upgradeCost.rectTransform.anchoredPosition;
             IniciarLatidoCosto(); // Arrancamos el latido al iniciar la escena
         }
+
+        canvasGroup = winPanel.GetComponent<CanvasGroup>();
+
+        // (Opcional) Si olvidaste ponerlo en el editor, esto se lo agrega automáticamente
+        if (canvasGroup == null)
+        {
+            canvasGroup = winPanel.AddComponent<CanvasGroup>();
+        }
+
+        canvasGroup.alpha = 0f;
+
     }
     void Update()
     {
@@ -62,12 +77,12 @@ public class ClickCounter : MonoBehaviour
             holdProgress = Mathf.Max(0, holdProgress);
         }
 
-        if(totalClicks >= 10000000)
+        if (!hasWon && totalClicks >= 1000000000)
         {
             Win();
         }
-
     }
+
 
     public void IniciarLatidoCosto()
     {
@@ -78,7 +93,7 @@ public class ClickCounter : MonoBehaviour
         upgradeCost.rectTransform.anchoredPosition = posOriginalUpgrade;
         upgradeCost.rectTransform.localScale = Vector3.one;
 
-        upgradeHeartbeatTween = upgradeCost.rectTransform.DOScale(1.15f, 0.6f)
+        upgradeHeartbeatTween = upgradeCost.rectTransform.DOScale(1.05f, 0.9f)
             .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo);
     }
@@ -195,23 +210,21 @@ public class ClickCounter : MonoBehaviour
     [ContextMenu("Win")]
     public void Win()
     {
-        // 1. Obtenemos el CanvasGroup de tu panel
-        CanvasGroup canvasGroup = winPanel.GetComponent<CanvasGroup>();
+        if (hasWon) return;
 
-        // (Opcional) Si olvidaste ponerlo en el editor, esto se lo agrega automáticamente
-        if (canvasGroup == null)
+        hasWon = true;
+
+        AutoClicker.Instance.isAutoClickerActive = false;
+
+        FindFirstObjectByType<ClickInputManager>()?.DestroyInputManager();
+
+        DOTween.KillAll();
+
+        DOVirtual.DelayedCall(1f, () =>
         {
-            canvasGroup = winPanel.AddComponent<CanvasGroup>();
-        }
-
-        // 2. Antes de activar el panel, lo hacemos totalmente transparente (Alpha = 0)
-        canvasGroup.alpha = 0f;
-
-        // 3. Activamos el panel (el jugador no lo verá de golpe porque es transparente)
-        winPanel.SetActive(true);
-
-        // 4. Hacemos el "Fade In": Llevamos el Alpha a 1 (totalmente opaco) en 1 segundo
-        canvasGroup.DOFade(1f, 1.5f).SetEase(Ease.InOutQuad);
+            winPanel.SetActive(true);
+            canvasGroup.DOFade(1f, 1.5f).SetEase(Ease.InOutQuad);
+        });
 
         DOVirtual.DelayedCall(5f, () =>
         {

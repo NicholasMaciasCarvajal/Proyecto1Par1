@@ -12,7 +12,7 @@ public class ClickInputManager : MonoBehaviour
 
     [Header("Floating Text Setup")]
     public FloatingText floatingTextPrefab;
-    public RectTransform floatingTextContainer; // Un panel vac�o dentro de tu Canvas
+    public RectTransform floatingTextContainer; 
 
     bool holding;
 
@@ -142,4 +142,10 @@ public class ClickInputManager : MonoBehaviour
         // Iniciamos la animación
         nuevoTexto.Animar(valorTexto);
     }
+
+    public void DestroyInputManager()
+    {
+        Destroy(gameObject);
+    }
+
 }

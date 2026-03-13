@@ -65,6 +65,8 @@ public class ModifierClick : MonoBehaviour
 
         int roll = Random.Range(0, 3);
 
+        AutoClicker.Instance.isAutoClickerActive = true;
+
         switch (roll)
         {
             case 0:

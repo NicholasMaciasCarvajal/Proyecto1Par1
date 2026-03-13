@@ -29,24 +29,8 @@ public class AutoClicker : MonoBehaviour
             // Pausamos la ejecución por 0.4 segundos
             yield return new WaitForSeconds(clickInterval);
 
-            // --- LÓGICA DE AUTO-DESBLOQUEO ---
-            // Si el autoclicker está apagado, revisamos si ya cumple la condición para encenderse
-            if (!isAutoClickerActive)
-            {
-                BigInteger currentClickValue = ModifierClick.Instance.GetClickValue();
-                BigInteger potentialAutoClickValue = currentClickValue / 2;
-
-                // Si el valor que daría es 2 o mayor, lo activamos
-                if (potentialAutoClickValue >= 2)
-                {
-                    isAutoClickerActive = true;
-                    Debug.Log("¡AutoClicker desbloqueado y activado automáticamente!");
-                }
-            }
-            // ---------------------------------
-
             // Solo generamos ganancias si el AutoClicker ya está activado
-            if (isAutoClickerActive)
+            if (isAutoClickerActive && !GameManager.Instance.IsPaused)
             {
                 GenerateAutoClick();
                 
@@ -69,7 +53,9 @@ public class AutoClicker : MonoBehaviour
             autoClickValue = 1;
         }
 
-        ClickCounter.Instance.totalClicks += autoClickValue;
-        ClickCounter.Instance.ActualizarClicks();
+        //ClickCounter.Instance.totalClicks += autoClickValue;
+        //ClickCounter.Instance.ActualizarClicks();
+        ClickCounter.Instance.AddClick(autoClickValue);
+
     }
 }

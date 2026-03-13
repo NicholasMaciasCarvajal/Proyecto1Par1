@@ -2835,7 +2835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ModifierClick
   baseClickValue: 1
-  sumLevel: 0
+  sumLevel: 1
   multiplierLevel: 0
   percentLevel: 0
   sumPerLevel: 6.36
