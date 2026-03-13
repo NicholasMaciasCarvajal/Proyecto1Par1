@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-using System.Numerics; // Asegúrate de incluir esto para BigInteger
+using System.Numerics; // Asegï¿½rate de incluir esto para BigInteger
 
 public class ClickInputManager : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class ClickInputManager : MonoBehaviour
 
     [Header("Floating Text Setup")]
     public FloatingText floatingTextPrefab;
-    public RectTransform floatingTextContainer; // Un panel vacío dentro de tu Canvas
+    public RectTransform floatingTextContainer; // Un panel vacï¿½o dentro de tu Canvas
 
     bool holding;
 
@@ -82,32 +82,64 @@ public class ClickInputManager : MonoBehaviour
         // Instanciamos el prefab dentro del contenedor
         FloatingText nuevoTexto = Instantiate(floatingTextPrefab, floatingTextContainer);
 
-        // Convertimos la posición del mouse de la pantalla al Canvas
+        // Convertimos la posiciï¿½n del mouse de la pantalla al Canvas
         UnityEngine.Vector2 localPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             floatingTextContainer,
             Input.mousePosition,
-            null, // Cambia esto a Camera.main si tu Canvas está en "Screen Space - Camera"
+            null, // Cambia esto a Camera.main si tu Canvas estï¿½ en "Screen Space - Camera"
             out localPoint);
 
-        // Asignamos la posición y le damos algo de aleatoriedad para que no salgan todos amontonados
+        // Asignamos la posiciï¿½n y le damos algo de aleatoriedad para que no salgan todos amontonados
         float randomX = UnityEngine.Random.Range(-20f, 20f);
         float randomY = UnityEngine.Random.Range(-20f, 20f);
         nuevoTexto.GetComponent<RectTransform>().anchoredPosition = localPoint + new UnityEngine.Vector2(randomX, randomY);
 
-        // Formateamos el número (usa tu misma lógica de mantisas si lo prefieres)
+        // Formateamos el nï¿½mero (usa tu misma lï¿½gica de mantisas si lo prefieres)
         string valorTexto = valor < 1000000 ? valor.ToString("N0") : FormatBigNumber(valor);
 
-        // Iniciamos la animación
+        // Iniciamos la animaciï¿½n
         nuevoTexto.Animar(valorTexto);
     }
 
-    // Un pequeño helper para que los números del texto flotante coincidan con tu formato
+    // Un pequeï¿½o helper para que los nï¿½meros del texto flotante coincidan con tu formato
     private string FormatBigNumber(BigInteger value)
     {
         double valorDouble = (double)value;
         int exponente = (int)Math.Floor(Math.Log10(valorDouble));
         double mantisa = valorDouble / Math.Pow(10, exponente);
         return $"{mantisa:F2}x10^{exponente}";
+    }
+
+    public void GenerarTextoFlotanteAuto(BigInteger valor)
+    {
+        if (floatingTextPrefab == null || floatingTextContainer == null) return;
+
+        // Instanciamos el prefab dentro del contenedor
+        FloatingText nuevoTexto = Instantiate(floatingTextPrefab, floatingTextContainer);
+
+        // --- EL CAMBIO PRINCIPAL ---
+        // Calculamos el centro exacto de la pantalla actual
+        UnityEngine.Vector2 centroPantalla = new UnityEngine.Vector2(Screen.width / 2f, Screen.height / 2f);
+
+        // Convertimos esa posiciÃ³n central de la pantalla al espacio del Canvas
+        UnityEngine.Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            floatingTextContainer,
+            centroPantalla, // Usamos el centro en lugar de Input.mousePosition
+            null,           // Cambia esto a Camera.main si tu Canvas estÃ¡ en "Screen Space - Camera"
+            out localPoint);
+
+        // Le damos un poco MÃS de aleatoriedad (ej. de -40 a 40) para que el auto-clicker
+        // parezca una "fuente" de nÃºmeros burbujeando en el centro
+        float randomX = UnityEngine.Random.Range(-40f, 40f);
+        float randomY = UnityEngine.Random.Range(-40f, 40f);
+        nuevoTexto.GetComponent<RectTransform>().anchoredPosition = localPoint + new UnityEngine.Vector2(randomX, randomY);
+
+        // Formateamos el nÃºmero usando tu misma lÃ³gica
+        string valorTexto = valor < 1000000 ? valor.ToString("N0") : FormatBigNumber(valor);
+
+        // Iniciamos la animaciÃ³n
+        nuevoTexto.Animar(valorTexto);
     }
 }

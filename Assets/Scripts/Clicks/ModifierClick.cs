@@ -18,7 +18,7 @@ public class ModifierClick : MonoBehaviour
     public double multiplierPerLevel = 2;
     public double percentPerLevel = 0.5; // 50%
 
-    public BigInteger upgradeCost = 10;
+    public BigInteger upgradeCost = 3;
     public string upgradeCostS;
 
     void Awake()
@@ -37,6 +37,21 @@ public class ModifierClick : MonoBehaviour
 
         double percent = percentLevel * percentPerLevel;
         value *= (1 + percent);
+
+        // --- LÓGICA DE REDONDEO PERSONALIZADO ---
+        // 1. Obtenemos solo la parte decimal (ej. de 5.75, obtenemos 0.75)
+        double fractionalPart = value - System.Math.Truncate(value);
+
+        // 2. Evaluamos si es 0.7 o mayor
+        if (fractionalPart >= 0.7)
+        {
+            value = System.Math.Ceiling(value); // Redondea al siguiente entero (ej. 5.7 -> 6)
+        }
+        else
+        {
+            value = System.Math.Floor(value);   // Trunca los decimales (ej. 5.6 -> 5)
+        }
+        // ----------------------------------------
 
         Debug.Log("ClickValue: " + value);
 
@@ -76,7 +91,7 @@ public class ModifierClick : MonoBehaviour
     {
         ClickCounter.Instance.totalClicks = ClickCounter.Instance.totalClicks - upgradeCost;
         ClickCounter.Instance.ActualizarClicks();
-        upgradeCost = new BigInteger((double)upgradeCost * 2.25);
+        upgradeCost = new BigInteger((double)upgradeCost * 2.15);
         upgradeCostS = upgradeCost.ToString();
         ClickCounter.Instance.ActualizarCosto();
 
