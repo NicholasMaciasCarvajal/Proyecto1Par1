@@ -193,7 +193,7 @@ public class ClickCounter : MonoBehaviour
     {
         if (ModifierClick.Instance.upgradeCost < 1000000)
         {
-            upgradeCost.text = "Costo: " + ModifierClick.Instance.upgradeCost.ToString("N0");
+            upgradeCost.text = "Cost: " + ModifierClick.Instance.upgradeCost.ToString("N0");
         }
         else
         {
@@ -203,7 +203,7 @@ public class ClickCounter : MonoBehaviour
 
             double mantisa = valorDouble / Math.Pow(10, exponente);
 
-            upgradeCost.text = $"Costo: {mantisa:F2} × 10<sup>{exponente}</sup>";
+            upgradeCost.text = $"Cost: {mantisa:F2} × 10<sup>{exponente}</sup>";
         }
     }
 
