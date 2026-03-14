@@ -26,10 +26,10 @@ public class UpgradeGenerator : MonoBehaviour
                 float tiempo = Random.Range(minTime, maxTime);
                 yield return new WaitForSeconds(tiempo);
 
-                float x = Random.Range(-6f, 6f);
-                float y = Random.Range(-3f, 3f);
+                float x = Random.Range(-4f, 4f);
+                float y = Random.Range(-2f, 2f);
 
-                Vector3 posicion = new Vector3(x, y, 0f);
+                Vector3 posicion = new Vector3(x, y, -2.75f);
 
                 currentInstance = Instantiate(prefab, posicion, Quaternion.identity);
             }

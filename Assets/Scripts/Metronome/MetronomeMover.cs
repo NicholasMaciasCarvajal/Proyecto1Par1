@@ -12,6 +12,7 @@ public class MetronomeMover : MonoBehaviour
     {
         t += Time.deltaTime * speed;
 
-        transform.position = Vector2.Lerp(pointA.position, pointB.position, Mathf.PingPong(t, 1));
+        // CAMBIO AQUÍ: Usamos Vector3.Lerp para conservar el eje Z
+        transform.position = Vector3.Lerp(pointA.position, pointB.position, Mathf.PingPong(t, 1));
     }
 }

@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     {
         tutorialPanel.SetActive(true);
 
-        DOVirtual.DelayedCall(5f, () =>
+        DOVirtual.DelayedCall(7.5f, () =>
         {
             SceneManager.LoadScene("MainGameplay");
             SceneManager.UnloadSceneAsync("MainMenu");
