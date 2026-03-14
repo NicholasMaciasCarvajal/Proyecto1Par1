@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fc8b1ba3d4ebc294c9564d6bd3e6ef7b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9aeebbb134c059b40b50435f239e562c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1289,6 +1289,7 @@ Transform:
   - {fileID: 534632789}
   - {fileID: 360509705}
   - {fileID: 1900496387}
+  - {fileID: 1193656673}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &822182221
@@ -2057,6 +2058,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff335b62312488843bdbb7391baa2355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseController
+--- !u!1 &1193656672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1193656673}
+  - component: {fileID: 1193656674}
+  m_Layer: 0
+  m_Name: MeshEvolution
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1193656673
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193656672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 763159714}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1193656674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193656672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21f2478efc08d94ea9eaabd1e500138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeshEvolutionManager
+  clicksPerStageString: 10000000
+  stages:
+  - mesh: {fileID: 212370497460711607, guid: 84db174424df6434b8d7b0c8b63fa551, type: 3}
+    material: {fileID: 2100000, guid: 71fa99f5df61bd84e8d14d0ce5c19833, type: 2}
+  - mesh: {fileID: 70948873267775455, guid: b3766ce2e685c284fafa5d6dc7da9eca, type: 3}
+    material: {fileID: 2100000, guid: 4e3883647127f1a45a08899b327cc0a2, type: 2}
+  targetMeshFilter: {fileID: 1690130064}
+  targetMeshRenderer: {fileID: 1690130063}
 --- !u!1 &1413344422
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,7 +2394,6 @@ GameObject:
   - component: {fileID: 1690130065}
   - component: {fileID: 1690130064}
   - component: {fileID: 1690130063}
-  - component: {fileID: 1690130062}
   - component: {fileID: 1690130066}
   m_Layer: 0
   m_Name: Planeta
@@ -2350,27 +2402,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &1690130062
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1690130061}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1690130063
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2396,7 +2427,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 71fa99f5df61bd84e8d14d0ce5c19833, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2427,7 +2458,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690130061}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 212370497460711607, guid: 84db174424df6434b8d7b0c8b63fa551, type: 3}
 --- !u!4 &1690130065
 Transform:
   m_ObjectHideFlags: 0
@@ -2438,7 +2469,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 250, y: 250, z: 250}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2455,8 +2486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eba4e6f607ebad4aa7872105371f407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotacionPlaneta
-  duracionVuelta: 10.19
-  ejeDeRotacion: {x: 0.05, y: 1, z: 0}
+  duracionVuelta: 60
+  ejeDeRotacion: {x: 0.1, y: 1, z: 0.2}
 --- !u!1 &1754590631
 GameObject:
   m_ObjectHideFlags: 0
@@ -2514,7 +2545,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Haz Destruido el Planeta
+  m_text: The Mine Has Grow
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2841,7 +2872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoClicker
   isAutoClickerActive: 0
-  clickInterval: 0.4
+  clickInterval: 0.135
 --- !u!1 &1913549212
 GameObject:
   m_ObjectHideFlags: 0

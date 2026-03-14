@@ -93,7 +93,7 @@ public class ModifierClick : MonoBehaviour
     {
         ClickCounter.Instance.totalClicks = ClickCounter.Instance.totalClicks - upgradeCost;
         ClickCounter.Instance.ActualizarClicks();
-        upgradeCost = new BigInteger((double)upgradeCost * 2.15);
+        upgradeCost = new BigInteger((double)upgradeCost * 1.88);
         upgradeCostS = upgradeCost.ToString();
         ClickCounter.Instance.ActualizarCosto();
 

@@ -103,13 +103,13 @@ public class ClickCounter : MonoBehaviour
         totalClicks += amount;
 
         float factorLog = (float)Math.Log10((double)amount + 1);
-        float intensidad = 20f;
-        float fuerzaFinal = Mathf.Min(5f + (factorLog * intensidad), 100f);
+        float intensidad = 12f;
+        float fuerzaFinal = Mathf.Min(5f + (factorLog * intensidad), 50f);
 
-        float escalaPunch = Mathf.Clamp(factorLog * 0.05f, 0.05f, 0.3f);
+        float escalaPunch = Mathf.Clamp(factorLog * 0.05f, 0.05f, 0.225f);
 
         float direccionAleatoria = UnityEngine.Random.Range(0.5f, 1.5f) * (UnityEngine.Random.value > 0.5f ? 1f : -1f);
-        float rotacionBase = Mathf.Clamp(factorLog * 2f, 5f, 15f);
+        float rotacionBase = Mathf.Clamp(factorLog * 2f, 5f, 8f);
         float rotacionFinal = rotacionBase * direccionAleatoria;
 
         clickText.rectTransform.DOKill(true);
@@ -118,17 +118,17 @@ public class ClickCounter : MonoBehaviour
         clickText.rectTransform.localRotation = Quaternion.identity;
 
 
-        clickText.rectTransform.DOShakeAnchorPos(0.15f, fuerzaFinal, 30, 90, false, true);
+        clickText.rectTransform.DOShakeAnchorPos(0.12f, fuerzaFinal, 18, 90, false, true);
 
         clickText.rectTransform.DOPunchScale(
             new Vector3(escalaPunch, escalaPunch, 0),
-            0.1f, 10, 1
+            0.1f, 7, 0.7f
         ).OnComplete(() => clickText.rectTransform.localScale = Vector3.one);
 
         clickText.rectTransform.DOPunchRotation(
             new Vector3(0, 0, rotacionFinal),
             0.15f,
-            15,
+            10,
             1
         ).OnComplete(() => clickText.rectTransform.localRotation = Quaternion.identity);
 
